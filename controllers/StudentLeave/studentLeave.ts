@@ -37,7 +37,7 @@ export const applyLeave = async (req: Request, res: Response) => {
       // status,
       advisorApproval,
       wardenApproval,
-      advisorCode: student.facultyId,
+      advisorCode: student.FacultyId,
       fileDocument: file,
     });
     return res.status(200).json({ leaves: leave });
