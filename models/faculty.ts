@@ -8,13 +8,12 @@ class Faculty extends Model<InferAttributes<Faculty>, InferCreationAttributes<Fa
   declare department: string;
   declare designation: string;
   declare qualification: string;
-  declare userId: ForeignKey<User["id"]>;
+  declare isAdvisor: boolean;
+  declare isWarden: boolean;
+  declare isHod: boolean;
+  declare isDean: boolean;
+  declare UserId: ForeignKey<User["id"]>;
 }
-
-// import Student from "./student"
-// Faculty.hasMany(Student, {
-//   foreignKey: "facultyId"
-// })
 
 Faculty.init(
   {
@@ -34,6 +33,22 @@ Faculty.init(
     qualification: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    isAdvisor: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
+    isWarden: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
+    isHod: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
+    isDean: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     },
   },
   { sequelize }

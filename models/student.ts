@@ -1,6 +1,7 @@
-import { Model, DataTypes, ForeignKey } from "sequelize";
+import { Model, DataTypes, ForeignKey, NonAttribute } from "sequelize";
 import sequelize from "./indexModel";
 import Faculty from "./faculty"
+import User from "./user"
 
 class Student extends Model {
   declare id: number;
@@ -14,7 +15,10 @@ class Student extends Model {
   declare roomNo: string;
   declare cgpa: number;
   declare batch: number;
-  declare facultyId: ForeignKey<Faculty["id"]>;
+  declare FacultyId: ForeignKey<Faculty["id"]>;
+  declare UserId: ForeignKey<User["id"]>;
+  // declare User: NonAttribute<User>;
+  // declare Faculty: NonAttribute<Faculty>;
 }
 
 Student.init(

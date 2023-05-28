@@ -1,9 +1,9 @@
 import express from 'express';
-import { userRegister, userLogin, getUser } from '../controllers/Authentication/auth';
+import { userLogin, getUser } from '../controllers/Authentication/auth';
 import authentication from '../middleware/authentication';
 
 const router = express.Router();
-router.post('/register', userRegister)
+// router.post('/register', userRegister)
 router.post('/login', userLogin)
 router.get('/getUser',authentication,getUser)
 // router.post('/logout', logout)

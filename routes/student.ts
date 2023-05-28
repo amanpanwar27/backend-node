@@ -7,6 +7,6 @@ router.get('/get/:studentId', getStudent);
 router.patch('/update', updateStudent);
 router.get('/getAdvisees/:advisorCode', getAdvisees)
 router.get("/getByBatch/:year", getStudentsByBatch)
-router.post("/addStudent", authentication, addStudent)
+router.post("/register", addStudent)
 
 export default router

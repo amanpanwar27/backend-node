@@ -1,35 +1,67 @@
 import { Request, Response } from "express";
 import Student from "../../models/student";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import User from "../../models/user";
+import Faculty from "../../models/faculty";
 // import { hashSync, genSaltSync, compareSync } from "bcrypt";
 
 export const addStudent = async (req: Request, res: Response) => {
   try {
-    let student = await Student.findOne({
-      where: {
-        id: req.body.id,
-      },
+    const data = req.body;
+    let user = await User.findOne({
+      where: { email: data.user.email },
     });
-    if (student) {
-      return res.status(500).json({
+    if (user) {
+      return res.status(400).json({
         msg: "failure",
         data: null,
-        error: "student already exists",
+        error: "user already exists, please login",
       });
     }
-    student = await Student.create({...req.body, userId: res.locals.user.id});
-    return res.status(200).json({
-      msg: "success",
-      data: student,
-      error: null,
-    });
-  } catch (e) {
+    data.user.password = bcrypt.hashSync(data.user.password, 10);
+    user = await User.create(data.user);
+    data.user = user.toJSON()
+    delete data.user.password;
+    const student = await Student.create({...data.student, UserId: user.id})
+    // user.setStudent(student)
+    data.student = student.toJSON()
+    const token = jwt.sign(data, "supersecretkey");
+    return res.json({ success: true, token, data });
+  } catch (error) {
+    console.log(error);
     return res.status(500).json({
       msg: "failure",
       data: null,
-      error: e
-    })
+      error,
+    });
   }
+  // try {
+  //   let student = await Student.findOne({
+  //     where: {
+  //       id: req.body.id,
+  //     },
+  //   });
+  //   if (student) {
+  //     return res.status(500).json({
+  //       msg: "failure",
+  //       data: null,
+  //       error: "student already exists",
+  //     });
+  //   }
+  //   student = await Student.create({ ...req.body, userId: res.locals.user.id });
+  //   return res.status(200).json({
+  //     msg: "success",
+  //     data: student,
+  //     error: null,
+  //   });
+  // } catch (e) {
+  //   return res.status(500).json({
+  //     msg: "failure",
+  //     data: null,
+  //     error: e,
+  //   });
+  // }
 };
 
 export const getStudent = async (req: Request, res: Response) => {
@@ -105,8 +137,8 @@ export const updateStudent = async (req: Request, res: Response) => {
     return res.status(500).json({
       msg: "failure",
       data: null,
-      error: e
-    })
+      error: e,
+    });
   }
 };
 
