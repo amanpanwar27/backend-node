@@ -8,9 +8,9 @@ class Faculty extends Model<InferAttributes<Faculty>, InferCreationAttributes<Fa
   declare department: string;
   declare designation: string;
   declare qualification: string;
-  declare isWarden: boolean;
-  declare isHod: boolean;
-  declare isDean: boolean;
+  declare wardenOfHostel: string;
+  declare hodOfDepartment: string;
+  declare deanOfCollege: boolean;
   declare UserId: ForeignKey<User["id"]>;
 }
 
@@ -33,18 +33,15 @@ Faculty.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    isWarden: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false
+    wardenOfHostel: {
+      type: DataTypes.STRING,
     },
-    isHod: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false
+    hodOfDepartment: {
+      type: DataTypes.STRING,
     },
-    isDean: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false
-    },
+    deanOfCollege: {
+      type: DataTypes.STRING,
+    }
   },
   { sequelize }
 );
