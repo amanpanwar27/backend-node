@@ -63,7 +63,7 @@ Student.init(
     },
     cgpa: {
       type: DataTypes.FLOAT,
-      allowNull: false,
+      defaultValue: 0,
     },
     batch: {
       type: DataTypes.INTEGER,

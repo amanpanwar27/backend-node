@@ -25,7 +25,7 @@ class StudentLeave extends Model<
   declare advisorCode: string;
   declare advisorApproval: boolean;
   declare wardenApproval: boolean;
-  declare studentId: ForeignKey<Student["id"]>;
+  declare StudentId: ForeignKey<Student["id"]>;
 }
 StudentLeave.init(
   {

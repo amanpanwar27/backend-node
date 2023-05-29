@@ -28,7 +28,7 @@ export const applyLeave = async (req: Request, res: Response) => {
       return res.status(400).json({ success: false, errors: err.array() });
     }
     let leave = await StudentLeave.create({
-      studentId,
+      StudentId: studentId,
       startDate,
       endDate,
       workingDays,

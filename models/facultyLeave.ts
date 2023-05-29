@@ -8,12 +8,13 @@ import {
 } from "sequelize";
 
 import sequelize from "./indexModel";
+import Faculty from "./faculty"
 
 class FacultyLeave extends Model<
   InferAttributes<FacultyLeave>,
   InferCreationAttributes<FacultyLeave>
 > {
-  declare facultyId: ForeignKey<string>;
+  declare FacultyId: ForeignKey<Faculty["id"]>;
   declare startDate: Date;
   declare endDate: Date;
   declare reason: string;
