@@ -10,7 +10,7 @@ const authentication = async(req:Request, res:Response,next:NextFunction)=>{
         console.log(data);
         
         res.locals.user = data
-        res.locals.user=res.locals.user.user;
+        // res.locals.user=res.locals.user.user;
         
         next();
     } catch (error) {

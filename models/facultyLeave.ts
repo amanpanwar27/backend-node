@@ -62,6 +62,13 @@ FacultyLeave.init(
       //  2 -> dean approved
       // -1 -> rejected
     },
+    workArrangement:{
+      type:DataTypes.UUID,
+      references:{
+        model:Faculty,
+        key:"id"
+      }
+    },
     toCount: {
       type: DataTypes.BOOLEAN,
       defaultValue: true,

@@ -8,7 +8,7 @@ export const applyLeave = async (req: Request, res: Response) => {
     const facultyLeave = req.body;
     let file = req.file;
     let faculty = await Faculty.findOne({
-      where: { id: res.locals.faculty.id },
+      where: { id: res.locals.user.faculty.id },
     });
     if (!faculty) {
       return res
@@ -18,6 +18,7 @@ export const applyLeave = async (req: Request, res: Response) => {
     let leave = await FacultyLeave.create({
       ...facultyLeave,
       fileDocument: file,
+      FacultyId:res.locals.user.faculty.id
     });
     return res.status(200).json({
       msg: "success",
@@ -34,7 +35,7 @@ export const applyLeave = async (req: Request, res: Response) => {
 // Get All Leaves Details of One faculty using faculty id
 export const getFacultyLeaves = async (req: Request, res: Response) => {
   try {
-    let facultyId = res.locals.faculty.id;
+    let facultyId = res.locals.user.faculty.id;
     let faculty = await Faculty.findOne({
       where: { id: facultyId },
     });
@@ -54,7 +55,8 @@ export const getFacultyLeaves = async (req: Request, res: Response) => {
 
 export const getLeavesByDept = async (req: Request, res: Response) => {
   try {
-    let department = res.locals.faculty.hodOfDepartment;
+    let department = res.locals.user.faculty.hodOfDepartment;
+    department="xyy"
     if (!department) {
       return res.status(400).json({
         msg: "failure",
@@ -62,16 +64,19 @@ export const getLeavesByDept = async (req: Request, res: Response) => {
         error: "access denied"
       })
     }
-    let leaves = FacultyLeave.findAll({
+    let leaves = await FacultyLeave.findAll({
+      
       include: [
         {
           model: Faculty,
-          where: {
-            department,
-          },
+          where:{
+            department
+          }
         },
       ],
     });
+    console.log(leaves);
+    
     return res.status(200).json({
       msg: "success",
       data: leaves,
@@ -88,7 +93,7 @@ export const getLeavesByDept = async (req: Request, res: Response) => {
 
 export const getAllLeaves = async (req: Request, res: Response) => {
   try {
-    const deanOfClg = res.locals.faculty.deanOfCollege;
+    const deanOfClg = res.locals.user.faculty.deanOfCollege;
     if (!deanOfClg) {
       return res.status(200).json({
         msg: "success",
