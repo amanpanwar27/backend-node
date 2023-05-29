@@ -2,31 +2,6 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../../models/user";
-// import Faculty from "../../models/faculty";
-// import Student from "../../models/student";
-// import "../../models/associations";
-
-// export const userRegister = async (req: Request, res: Response): Promise<Response> => {
-//     try {
-//         let user = await User.findOne({
-//             where: { email: req.body.email }
-//         });
-//         if (user) {
-//             return res.status(400).json({ success: false, errorType: "msg", error: "User already exists. Please Login" })
-//         }
-//         const data = req.body
-//         data.password = bcrypt.hashSync(data.password, 10);
-//         user = await User.create(data, { include: Student })
-//         delete data.password
-//         const token = jwt.sign(data, "supersecretkey")
-//         return res.json({ success: true, token })
-//     } catch (error) {
-//         console.log(error);
-//
-//         return res.status(500).json({ success: false, errorType: "msg", error: "Internal Server Error" })
-//     }
-//
-// }
 import Student from "../../models/student";
 import Faculty from "../../models/faculty";
 
@@ -39,7 +14,16 @@ export const userLogin = async (
       where: {
         email: req.body.email,
       },
-      include: [Student, Faculty],
+      // include: [
+      //   {
+      //     model: Student,
+      //     as: "student",
+      //   },
+      //   {
+      //     model: Faculty,
+      //     as: "faculty",
+      //   },
+      // ],
     });
     if (!user) {
       return res.status(400).json({
@@ -56,11 +40,22 @@ export const userLogin = async (
         error: "invalid credentials",
       });
     }
-    const { password, ...data } = user.dataValues;
+    const { password, ...userData } = user.toJSON();
+    const faculty = await user.getStudent();
+    const student = await user.getStudent();
+    let data:any = {
+      user: userData,
+    }
+    if (user.isFaculty) {
+      data.faculty = faculty
+    }
+    if (user.isStudent) {
+      data.student = student
+    }
     const token = jwt.sign(data, "supersecretkey");
     return res.status(200).json({
       msg: "success",
-      data: {token,data},
+      data: { token, data },
       error: "invalid credentials",
     });
   } catch (error) {
