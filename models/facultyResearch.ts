@@ -23,7 +23,7 @@ class Research extends Model<
   declare volNo: number;
   declare pageNo: number;
   declare researchLink: string;
-  declare facultyId: ForeignKey<Faculty["id"]>;
+  declare FacultyId: ForeignKey<Faculty["id"]>;
 }
 
 Research.init(

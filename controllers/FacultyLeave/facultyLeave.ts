@@ -46,7 +46,7 @@ export const getFacultyLeaves = async (req: Request, res: Response) => {
   }
   try {
     const leaves = await FacultyLeave.findAll({
-      where: { facultyId },
+      where: { FacultyId: facultyId },
     });
     res.status(200).json({ msg: "success", data: leaves, error: null });
   } catch (error) {

@@ -22,7 +22,7 @@ export const getFacultyResearch = async (req: Request, res: Response) => {
   try {
     const researches = await Research.findAll({
       where: {
-        facultyId: req.params.facultyId,
+        FacultyId: req.params.facultyId,
       },
     });
     return res.status(200).json({
