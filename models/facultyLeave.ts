@@ -23,7 +23,7 @@ class FacultyLeave extends Model<
   declare status: number;
   declare toCount: boolean;
   declare fileDocument: Express.Multer.File | undefined;
-  declare workArrangement: string;
+  declare workArrangement: ForeignKey<Faculty["id"]>;
   declare addrDuringLeave: string;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
@@ -65,13 +65,6 @@ FacultyLeave.init(
     toCount: {
       type: DataTypes.BOOLEAN,
       defaultValue: true,
-    },
-    workArrangement: {
-      type: DataTypes.STRING,
-      references: {
-        model: "Faculties",
-        key: "facultyId",
-      },
     },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
