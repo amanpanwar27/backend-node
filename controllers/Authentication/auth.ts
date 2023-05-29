@@ -41,15 +41,15 @@ export const userLogin = async (
       });
     }
     const { password, ...userData } = user.toJSON();
-    const faculty = await user.getStudent();
+    const faculty = await user.getFaculty();
     const student = await user.getStudent();
     let data:any = {
       user: userData,
     }
-    if (user.isFaculty) {
+    if (user.isFaculty === true) {
       data.faculty = faculty
     }
-    if (user.isStudent) {
+    if (user.isStudent === true) {
       data.student = student
     }
     const token = jwt.sign(data, "supersecretkey");
