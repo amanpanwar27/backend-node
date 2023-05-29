@@ -1,15 +1,30 @@
 import { Request, Response } from "express";
 import Research from "../../models/facultyResearch";
+import Faculty from "../../models/faculty";
 
 export const addResearch = async (req: Request, res: Response) => {
+  
   try {
-    const research = await Research.create(req.body);
+    let research = await Research.findOne({
+      where:
+      {journalISBNNo: req.body.journalISBNNo}
+    })
+    if(research){
+      return res.status(400).json({
+        msg: "failure",
+        data: null,
+        error: "research already exists",
+      });
+    }
+    research = await Research.create({...req.body,FacultyId:res.locals.user.faculty.id});
     return res.status(200).json({
-      msg: "research added succesfully",
+      msg: "success",
       data: research,
       error: null,
     });
   } catch (e) {
+    console.log(e);
+    
     return res.status(500).json({
       msg: "failed",
       data: null,
@@ -24,6 +39,9 @@ export const getFacultyResearch = async (req: Request, res: Response) => {
       where: {
         FacultyId: req.params.facultyId,
       },
+      include:{
+        model:Faculty
+      }
     });
     return res.status(200).json({
       msg: "succes",
@@ -41,7 +59,9 @@ export const getFacultyResearch = async (req: Request, res: Response) => {
 
 export const getAllResearch = async (req: Request, res: Response) => {
   try {
-    const researches = await Research.findAll();
+    const researches = await Research.findAll({
+      include:Faculty
+    });
     return res.status(200).json({
       msg: "success",
       data: researches,
