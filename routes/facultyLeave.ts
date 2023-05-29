@@ -1,12 +1,21 @@
-import express from "express"
-import { getAllLeaves, applyLeave, getFacultyLeaves, getLeavesByDept } from "../controllers/FacultyLeave/facultyLeave"
-import authentication from "../middleware/authentication"
+import express from "express";
+import {
+  getAllLeaves,
+  applyLeave,
+  getFacultyLeaves,
+  getLeavesByDept,
+  approveLeave,
+  getFacultyLeaveById
+} from "../controllers/FacultyLeave/facultyLeave";
+import authentication from "../middleware/authentication";
 
-const router = express.Router()
+const router = express.Router();
 
-router.post("/apply", authentication, applyLeave)
-router.get("/getAllLeaves", authentication, getAllLeaves)
-router.get("/getFacultyLeaves/", authentication, getFacultyLeaves)
-router.get("/getLeavesByDept/", authentication, getLeavesByDept)
+router.post("/apply", authentication, applyLeave);
+router.get("/getAllLeaves", authentication, getAllLeaves);
+router.get("/getFacultyLeaves/", authentication, getFacultyLeaves);
+router.get("/getLeavesByDept/", authentication, getLeavesByDept);
+router.patch("/approve", authentication, approveLeave);
+router.get("/getLeaveById", authentication, getFacultyLeaveById);
 
-export default router
+export default router;

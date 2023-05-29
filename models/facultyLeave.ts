@@ -14,6 +14,7 @@ class FacultyLeave extends Model<
   InferAttributes<FacultyLeave>,
   InferCreationAttributes<FacultyLeave>
 > {
+  declare id: number;
   declare FacultyId: ForeignKey<Faculty["id"]>;
   declare startDate: Date;
   declare endDate: Date;
@@ -30,6 +31,11 @@ class FacultyLeave extends Model<
 }
 FacultyLeave.init(
   {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
     startDate: {
       type: DataTypes.DATEONLY,
       allowNull: false,
