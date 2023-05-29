@@ -1,7 +1,8 @@
-import { Model, DataTypes, InferAttributes, InferCreationAttributes, CreationOptional, ForeignKey } from "sequelize";
+import { Model, DataTypes, InferAttributes, InferCreationAttributes, CreationOptional, ForeignKey, NonAttribute } from "sequelize";
 
 import sequelize from "./indexModel";
 import User from "../models/user"
+import { Semester } from "./semester";
 
 class Faculty extends Model<InferAttributes<Faculty>, InferCreationAttributes<Faculty>> {
   declare id: string;
@@ -12,6 +13,7 @@ class Faculty extends Model<InferAttributes<Faculty>, InferCreationAttributes<Fa
   declare hodOfDepartment: string;
   declare deanOfCollege: boolean;
   declare UserId: ForeignKey<User["id"]>;
+  declare semesters:NonAttribute<Semester[]>;
 }
 
 Faculty.init(

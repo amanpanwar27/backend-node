@@ -6,6 +6,8 @@ import FacultyLeave from "./facultyLeave";
 import Research from "./facultyResearch";
 import Inventory from "./inventory";
 import sequelize from "sequelize";
+import { Semester,Course } from "./semester";
+import Subject from "./subject";
 
 User.hasOne(Student);
 Student.belongsTo(User);
@@ -25,6 +27,16 @@ Student.belongsTo(Faculty);
 Faculty.hasMany(FacultyLeave);
 FacultyLeave.belongsTo(Faculty);
 
+Student.hasMany(Semester);
+Semester.belongsTo(Student);
+
+Semester.hasMany(Course);
+Course.belongsTo(Semester);
+
+Subject.belongsTo(Course)
+Course.hasOne(Subject);
+
+
 User.sync()
 Faculty.sync()
 Student.sync()
@@ -32,3 +44,6 @@ StudentLeave.sync()
 FacultyLeave.sync()
 Research.sync()
 Inventory.sync();
+Semester.sync();
+Course.sync();
+Subject.sync();
