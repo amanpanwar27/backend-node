@@ -25,7 +25,7 @@ export const addFacultyDetails=async(req:Request, res:Response):Promise<Response
     // user.setFaculty(faculty)
     const token = jwt.sign(data, "supersecretkey");
     data.faculty = faculty.toJSON()
-    return res.status(500).json({
+    return res.status(200).json({
       msg: "success",
       data: {token,data},
       error:null,
