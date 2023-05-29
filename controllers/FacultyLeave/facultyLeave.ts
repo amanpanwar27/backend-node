@@ -56,7 +56,6 @@ export const getFacultyLeaves = async (req: Request, res: Response) => {
 export const getLeavesByDept = async (req: Request, res: Response) => {
   try {
     let department = res.locals.user.faculty.hodOfDepartment;
-    department="xyy"
     if (!department) {
       return res.status(400).json({
         msg: "failure",
