@@ -58,7 +58,11 @@ export const userLogin = async (
     }
     const { password, ...data } = user.dataValues;
     const token = jwt.sign(data, "supersecretkey");
-    return res.json({ success: true, token });
+    return res.status(200).json({
+      msg: "success",
+      data: {token,data},
+      error: "invalid credentials",
+    });
   } catch (error) {
     return res.status(400).json({
       msg: "failure",
