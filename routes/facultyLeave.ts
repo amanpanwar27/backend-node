@@ -15,7 +15,7 @@ router.post("/apply", authentication, applyLeave);
 router.get("/getAllLeaves", authentication, getAllLeaves);
 router.get("/getFacultyLeaves/", authentication, getFacultyLeaves);
 router.get("/getLeavesByDept/", authentication, getLeavesByDept);
-router.patch("/approve", authentication, approveLeave);
-router.get("/getLeaveById", authentication, getFacultyLeaveById);
+router.patch("/approve/:facultyLeaveId", authentication, approveLeave);
+router.get("/getLeaveById/:facultyLeaveId", authentication, getFacultyLeaveById);
 
 export default router;
