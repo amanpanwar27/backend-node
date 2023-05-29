@@ -6,17 +6,19 @@ import FacultyLeave from "../../models/facultyLeave";
 export const applyLeave = async (req: Request, res: Response) => {
   try {
     const facultyLeave = req.body;
-    // let file = req.file;
+    let file = req.file;
     let faculty = await Faculty.findOne({
-      // where: { email: res.locals.user.email }
-      where: { id: req.body.facultyId },
+      where: { id: res.locals.faculty.id },
     });
     if (!faculty) {
       return res
         .status(404)
-        .json({ msg: "failure", data: null, error: "faculty not found" });
+        .json({ msg: "failure", data: null, error: "access denied" });
     }
-    let leave = await FacultyLeave.create(facultyLeave);
+    let leave = await FacultyLeave.create({
+      ...facultyLeave,
+      fileDocument: file,
+    });
     return res.status(200).json({
       msg: "success",
       data: leave,
@@ -31,20 +33,16 @@ export const applyLeave = async (req: Request, res: Response) => {
 
 // Get All Leaves Details of One faculty using faculty id
 export const getFacultyLeaves = async (req: Request, res: Response) => {
-  let facultyId = req.params.facultyId;
-  let faculty = await Faculty.findOne({
-    // where: { email: res.locals.user.email },
-    where: { id: facultyId },
-  });
-  if (!faculty) {
-    return res
-      .status(404)
-      .json({ msg: "failure", data: null, error: "faculty not found" });
-    // return res
-    //   .status(400)
-    //   .json({ success: false, error: "Login First/For faculty only" });
-  }
   try {
+    let facultyId = res.locals.faculty.id;
+    let faculty = await Faculty.findOne({
+      where: { id: facultyId },
+    });
+    if (!faculty) {
+      return res
+        .status(404)
+        .json({ msg: "failure", data: null, error: "access denied" });
+    }
     const leaves = await FacultyLeave.findAll({
       where: { FacultyId: facultyId },
     });
@@ -56,42 +54,59 @@ export const getFacultyLeaves = async (req: Request, res: Response) => {
 
 export const getLeavesByDept = async (req: Request, res: Response) => {
   try {
-    let department = req.params.dept;
+    let department = res.locals.faculty.hodOfDepartment;
+    if (!department) {
+      return res.status(400).json({
+        msg: "failure",
+        data: null,
+        error: "access denied"
+      })
+    }
     let leaves = FacultyLeave.findAll({
-      include: [{
-        model: Faculty,
-        where: {
-          department
-        }
-      }]
-    })
+      include: [
+        {
+          model: Faculty,
+          where: {
+            department,
+          },
+        },
+      ],
+    });
     return res.status(200).json({
       msg: "success",
       data: leaves,
-      error: null
-    })
+      error: null,
+    });
   } catch (e) {
     return res.status(500).json({
       msg: "failure",
       data: null,
-      error: e
-    })
+      error: e,
+    });
   }
-}
+};
 
 export const getAllLeaves = async (req: Request, res: Response) => {
   try {
+    const deanOfClg = res.locals.faculty.deanOfCollege;
+    if (!deanOfClg) {
+      return res.status(200).json({
+        msg: "success",
+        data: null,
+        error: "access denied"
+      })
+    }
     let leaves = await FacultyLeave.findAll();
     return res.status(200).json({
       msg: "success",
       data: leaves,
-      error: null
-    })
+      error: null,
+    });
   } catch (e) {
     return res.status(500).json({
       msg: "failure",
       data: null,
-      error: e
-    })
+      error: e,
+    });
   }
-}
+};
