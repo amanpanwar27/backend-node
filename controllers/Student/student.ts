@@ -27,6 +27,7 @@ export const addStudent = async (req: Request, res: Response) => {
       student = await Student.create({ ...data.student, UserId: user.id });
     } catch (e) {
       console.log(e);
+      user.destroy();
       return res.status(500).json({
         msg: "failure",
         data: null,

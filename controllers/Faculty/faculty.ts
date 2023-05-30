@@ -26,6 +26,7 @@ export const addFacultyDetails=async(req:Request, res:Response):Promise<Response
       faculty = await Faculty.create({...data.faculty, UserId: user.id })
     } catch (e) {
       console.log(e);
+      user.destroy();
       return res.status(500).json({
         msg: "failure",
         data: null,
