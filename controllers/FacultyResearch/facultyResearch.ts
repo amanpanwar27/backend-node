@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
 import Research from "../../models/facultyResearch";
 import Faculty from "../../models/faculty";
+import User from "../../models/user";
 
 export const addResearch = async (req: Request, res: Response) => {
+  console.log(req.body);
   
   try {
     let research = await Research.findOne({
@@ -60,7 +62,7 @@ export const getFacultyResearch = async (req: Request, res: Response) => {
 export const getAllResearch = async (req: Request, res: Response) => {
   try {
     const researches = await Research.findAll({
-      include:Faculty
+      include:[{model:Faculty,include:[{model:User}]}]
     });
     return res.status(200).json({
       msg: "success",
