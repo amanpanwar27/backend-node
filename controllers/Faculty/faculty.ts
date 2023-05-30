@@ -21,8 +21,18 @@ export const addFacultyDetails=async(req:Request, res:Response):Promise<Response
     user = await User.create(data.user);
     data.user = user.toJSON()
     delete data.user.password;
-    const faculty = await Faculty.create({...data.faculty, UserId: user.id })
-    // user.setFaculty(faculty)
+    let faculty;
+    try {
+      faculty = await Faculty.create({...data.faculty, UserId: user.id })
+    } catch (e) {
+      console.log(e);
+      return res.status(500).json({
+        msg: "failure",
+        data: null,
+        error:
+          "Unable to register! This may be due to invalid input, else try again after some time",
+      });
+    }
     const token = jwt.sign(data, "supersecretkey");
     data.faculty = faculty.toJSON()
     return res.status(200).json({

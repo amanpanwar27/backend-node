@@ -4,7 +4,6 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../../models/user";
 import Faculty from "../../models/faculty";
-// import { hashSync, genSaltSync, compareSync } from "bcrypt";
 
 export const addStudent = async (req: Request, res: Response) => {
   try {
@@ -21,11 +20,21 @@ export const addStudent = async (req: Request, res: Response) => {
     }
     data.user.password = bcrypt.hashSync(data.user.password, 10);
     user = await User.create(data.user);
-    data.user = user.toJSON()
+    data.user = user.toJSON();
     delete data.user.password;
-    const student = await Student.create({...data.student, UserId: user.id})
-    // user.setStudent(student)
-    data.student = student.toJSON()
+    let student;
+    try {
+      student = await Student.create({ ...data.student, UserId: user.id });
+    } catch (e) {
+      console.log(e);
+      return res.status(500).json({
+        msg: "failure",
+        data: null,
+        error:
+          "Unable to register! This may be due to invalid input, else try again after some time",
+      });
+    }
+    data.student = student.toJSON();
     const token = jwt.sign(data, "supersecretkey");
     return res.json({ success: true, token, data });
   } catch (error) {
@@ -36,37 +45,16 @@ export const addStudent = async (req: Request, res: Response) => {
       error,
     });
   }
-  // try {
-  //   let student = await Student.findOne({
-  //     where: {
-  //       id: req.body.id,
-  //     },
-  //   });
-  //   if (student) {
-  //     return res.status(500).json({
-  //       msg: "failure",
-  //       data: null,
-  //       error: "student already exists",
-  //     });
-  //   }
-  //   student = await Student.create({ ...req.body, userId: res.locals.user.id });
-  //   return res.status(200).json({
-  //     msg: "success",
-  //     data: student,
-  //     error: null,
-  //   });
-  // } catch (e) {
-  //   return res.status(500).json({
-  //     msg: "failure",
-  //     data: null,
-  //     error: e,
-  //   });
-  // }
 };
 
 export const getStudent = async (req: Request, res: Response) => {
-  const studentId: string = req.params.studentId;
   try {
+    const studentId: string = req.params.studentId;
+    // const isStudent = res.locals.user.user.isStudent;
+    // const isFaculty = res.locals.user.user.isFaculty;
+    // if (isStudent === true) {
+    //   if (studentId === res.locals.user.student.id)
+    // }
     let student = await Student.findOne({
       include: User,
       where: { id: studentId },
