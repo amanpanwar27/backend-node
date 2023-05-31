@@ -8,6 +8,8 @@ import Inventory from "./inventory";
 import sequelize from "sequelize";
 import { Semester,Course } from "./semester";
 import Subject from "./subject";
+import Complaint from "./complaint";
+import HostelComplaint from "./hostelcomplaint";
 
 User.hasOne(Student);
 Student.belongsTo(User);
@@ -47,3 +49,5 @@ Inventory.sync();
 Semester.sync();
 Course.sync();
 Subject.sync();
+Complaint.sync()
+HostelComplaint.sync();

@@ -9,7 +9,8 @@ import studentRouter from "./routes/student";
 import studentLeaveRouter from "./routes/studentLeave";
 import facultyResearchRouter from "./routes/facultyResearch";
 import facultyRouter from "./routes/faculty";
-import cdbRouter from "./routes/cdb";
+import cdbRouter from "./routes/cdb.js";
+import hostelcomplaintRouter from "./routes/hostelammeneties.js";
 import facultyLeaveRouter from "./routes/facultyLeave";
 import dotenv from "dotenv";
 
@@ -29,7 +30,8 @@ app.use("/studentLeave", studentLeaveRouter);
 app.use("/facultyResearch", facultyResearchRouter);
 app.use("/faculty", facultyRouter);
 app.use("/complaint", cdbRouter);
-app.use("/facultyLeave", facultyLeaveRouter)
+app.use("/facultyLeave", facultyLeaveRouter);
+app.use("/hostelcomplaint",hostelcomplaintRouter);
 
 app.listen(PORT, () => {
   console.log(`server is listening  on ${PORT}`);

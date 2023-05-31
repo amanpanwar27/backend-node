@@ -21,6 +21,7 @@ export const addStudent = async (req: Request, res: Response) => {
     data.user.password = bcrypt.hashSync(data.user.password, 10);
     user = await User.create(data.user);
     data.user = user.toJSON();
+    console.log(data.user);
     delete data.user.password;
     let student;
     try {

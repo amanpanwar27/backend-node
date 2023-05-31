@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
-import Complaint from "../../models/complaint";
+import HostelComplaint from "../../models/hostelcomplaint";
 
 export const submit_complaint = async (req:Request,res : Response)=>{
     console.log(req.body);
     try{
-    const data = await Complaint.create(req.body);
+      const data = await HostelComplaint.create(req.body);
     return res.status(201).json({
-        message:"success",
-        data : data,
+        message:"Sucessfully inserted in DB",
+        data : data
     });
     }
     catch(err){
@@ -21,7 +21,7 @@ export const submit_complaint = async (req:Request,res : Response)=>{
 
 export const get_all_complaints = async (req:Request,res:Response)=>{
     try{
-    const data = await Complaint.findAll();
+    const data = await HostelComplaint.findAll();
     console.log(data);
     res.status(201).json({
         message:"sucessfully fetched complaints",
@@ -41,7 +41,7 @@ export const get_filtered_complaints = async (req:Request,res:Response)=>{
     const status = req.query.status;
     console.log(status);
     try{
-      const data = await Complaint.findAll({
+      const data = await HostelComplaint.findAll({
         where:{
             status:status
         }
@@ -61,18 +61,18 @@ export const get_filtered_complaints = async (req:Request,res:Response)=>{
     }
 }
 export const get_stats = async (req:Request,res:Response)=>{
-    const rejected = await Complaint.findAll({
+    const rejected = await HostelComplaint.findAll({
         where :{
             status:"rejected"
         }
     });
-    const approved = await Complaint.findAll({
+    const approved = await HostelComplaint.findAll({
         where :{
             status:"approved"
         }
     });
 
-    const pending = await Complaint.findAll({
+    const pending = await HostelComplaint.findAll({
         where :{
             status:"pending"
         }
@@ -91,7 +91,7 @@ export const get_stats = async (req:Request,res:Response)=>{
 export const approve_complaint = async(req:Request,res:Response)=>{
     const complaint_id = req.body.complaint_id;
    try{ 
-    const data = await Complaint.update({
+    const data = await HostelComplaint.update({
       status:"approved"
     },{
         where:{
@@ -117,7 +117,7 @@ export const approve_complaint = async(req:Request,res:Response)=>{
 
 export const forward_complaint = async(req:Request,res:Response)=>{
     const complaint_id = req.body.complaint_id;
-    const currdata = await Complaint.findOne({
+    const currdata = await HostelComplaint.findOne({
         where: {
           id:complaint_id
         }
@@ -129,8 +129,9 @@ export const forward_complaint = async(req:Request,res:Response)=>{
         error: "complaint not found"
       })
     }
-    const data = await Complaint.update({
-        level : currdata.level+1
+
+    const data = await HostelComplaint.update({
+        level : currdata.level + 1
     },{
         where:{
             id:complaint_id
@@ -146,7 +147,7 @@ export const forward_complaint = async(req:Request,res:Response)=>{
 export const reject_complaint = async (req:Request,res:Response)=>{
     try{
       const complaint_id = req.body.complaint_id;
-    const data = await Complaint.update({
+    const data = await HostelComplaint.update({
         status:"rejected"
     },{
         where:{
@@ -167,93 +168,3 @@ export const reject_complaint = async (req:Request,res:Response)=>{
     });
     }
 }
-
-
-// import Student from "../../models/student";
-// import User from "../../models/user";
-
-// export const getComplaint = async (req: Request, res: Response) => {
-//   try {
-//     const complaintId = req.params.complaintId;
-//     let complaint = await Complaint.findOne({
-//       where: {
-//         id: complaintId,
-//       },
-//     });
-//     return res.status(200).json({
-//       msg: "success",
-//       data: complaint,
-//       error: null,
-//     });
-//   } catch (e) {
-//     return res.status(500).json({
-//       msg: "failure",
-//       data: null,
-//       error: e,
-//     });
-//   }
-// };
-
-// export const getComplaintsByLvl = async (req: Request, res: Response) => {
-//   try {
-//     const lvl = req.params.level
-//     let complaints = await Complaint.findAll({
-//       where: {
-//         level: lvl
-//       },
-//     });
-//     return res.status(200).json({
-//       msg: "success",
-//       data: complaints,
-//       error: null,
-//     });
-//   } catch (e) {
-//     return res.status(500).json({
-//       msg: "failure",
-//       data: null,
-//       error: e,
-//     });
-//   }
-// };
-
-// export const addComplaint = async (req: Request, res: Response) => {
-//   try {
-//     let complaint = req.body;
-//     complaint = await Complaint.create(complaint)
-//     return res.status(200).json({
-//       msg: "success",
-//       data: complaint,
-//       error: null
-//     })
-//   } catch (e) {
-//     return res.status(500).json({
-//       msg: "failure",
-//       data: null,
-//       error: e,
-//     });
-//   }
-// }
-
-// export const forwardComplaint = async (req: Request, res: Response) => {
-//   try {
-//     const complaintId = req.body.id;
-//     const level = req.body.level;
-//     await Complaint.update({ level: level }, {
-//       where: {
-//         id: complaintId
-//       }
-//     })
-//     return res.status(200).json({
-//       msg: "success",
-//       data: null,
-//       error: null
-//     })
-//   } catch (e) {
-//     return res.status(500).json({
-//       msg: "failure",
-//       data: null,
-//       error: e,
-//     });
-//   }
-// }
-// const { json } = require("sequelize");

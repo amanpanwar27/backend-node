@@ -1,23 +1,20 @@
 import { Model, DataTypes, CreationOptional } from "sequelize";
 import sequelize from "./indexModel";
 
-class Complaint extends Model {
+class HostelComplaint extends Model {
   declare id: CreationOptional<string>;
   declare complainant: number;
-  declare complainee: number;
-  declare status: string;
+  declare type_of_complaint : string
   declare level: number;
-  declare rejection_note : CreationOptional<string>;
+  declare status: string;
   declare description: string;
-  declare reg_date : string
-  declare punishment: CreationOptional<string>;
-  declare event_date : string;
+  declare rejection_note: CreationOptional<string>;
+  declare reg_date : string;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
-  
 }
 
-Complaint.init(
+HostelComplaint.init(
 {
   id: {
       type: DataTypes.UUID,
@@ -31,38 +28,30 @@ Complaint.init(
         key: "studentId",
       }
   },
-  complainee: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: "Students",
-        key: "studentId",
-      }
-  },
-  status:{
-      type:DataTypes.STRING
+  type_of_complaint :{
+    type:DataTypes.STRING,
   },
   level : {
-      type:DataTypes.INTEGER
+    type:DataTypes.NUMBER,
+    defaultValue:0
+},
+  status:{
+      type:DataTypes.STRING,
+      defaultValue:"pending"
+  },
+  description:{
+    type:DataTypes.STRING
   },
   rejection_note:{
       type:DataTypes.STRING,
       defaultValue:null
   },
-  description:{
+ 
+  reg_date:{
     type:DataTypes.STRING
-  },
-  reg_date :{
-  type:DataTypes.STRING
-  },
-  punishment:{
-    type : DataTypes.STRING,
-    defaultValue:null
-  },
-  event_date:{
-  type:DataTypes.STRING
-  },
+  }
   },
   { sequelize }
 );
 
-export default Complaint;
+export default HostelComplaint;
